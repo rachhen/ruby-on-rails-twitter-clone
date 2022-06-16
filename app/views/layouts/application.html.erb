@@ -28,9 +28,14 @@
               <a class="button is-light">
                 New Tweet
               </a>
-              <a class="button is-primary">
-                <strong>Sign up</strong>
-              </a>
+              <% if user_signed_in? %>
+                <%= link_to current_user.name, edit_user_registration_path, class: 'button is-info' %>
+                <%= link_to 'Logout', destroy_user_session_path, class: 'button is-danger', data: { turbo_method: :delete, turbo_confirm: "You want to sign out?"  } %>
+              <% end %>
+              <% if !user_signed_in? %>
+                <%= link_to 'Sign up', new_user_registration_path, class: 'button is-primary' %>
+                <%= link_to 'Login', new_user_session_path, class: 'button is-light' %>
+              <% end %>
             </div>
           </div>
         </div>

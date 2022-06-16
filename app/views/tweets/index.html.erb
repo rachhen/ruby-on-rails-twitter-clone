@@ -1,18 +1,13 @@
-<section class="section">
+<section class="section pt-5">
   <div class="container">
     <div class="columns">
-      <%= render 'trends' %>
+      <% if user_signed_in? %>
+        <%= render 'profile' %>
+      <% else %>
+        <%= render 'trends' %>
+      <% end %>
       <%= render 'feed', tweets: @tweets %>
       <%= render 'who-to-follow' %>
     </div>
   </div>
 </section>
-<div id="tweets">
-  <% @tweets.each do |tweet| %>
-    <%= render tweet %>
-    <p>
-      <%= link_to "Show this tweet", tweet %>
-    </p>
-  <% end %>
-</div>
-<%= link_to "New tweet", new_tweet_path %>
