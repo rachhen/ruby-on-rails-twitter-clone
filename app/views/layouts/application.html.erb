@@ -25,9 +25,7 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a class="button is-light">
-                New Tweet
-              </a>
+              <%= link_to "New Tweet", new_tweet_path, class: "button is-light" %>
               <% if user_signed_in? %>
                 <%= link_to current_user.name, edit_user_registration_path, class: 'button is-info' %>
                 <%= link_to 'Logout', destroy_user_session_path, class: 'button is-danger', data: { turbo_method: :delete, turbo_confirm: "You want to sign out?"  } %>

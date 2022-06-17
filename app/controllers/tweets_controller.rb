@@ -4,8 +4,10 @@ class TweetsController < ApplicationController
 
   # GET /tweets or /tweets.json
   def index
-    @tweets = Tweet.all.order(created_at: :desc)
     @tweet = Tweet.new
+    @tweets = Tweet.all.order(created_at: :desc)
+    not_include_user = user_signed_in? ? current_user.id : nil
+    @users = User.where.not(id: not_include_user).order(created_at: :desc)
   end
 
   # GET /tweets/1 or /tweets/1.json
@@ -39,12 +41,19 @@ class TweetsController < ApplicationController
   # PATCH/PUT /tweets/1 or /tweets/1.json
   def update
     respond_to do |format|
-      if @tweet.update(tweet_params)
-        format.html { redirect_to tweet_url(@tweet), notice: "Tweet was successfully updated." }
-        format.json { render :show, status: :ok, location: @tweet }
-      else
+      if @tweet.user.id != current_user.id 
+        flash.now[:alert] = "You can only edit your own tweets"
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @tweet.errors, status: :unprocessable_entity }
+        format.json { render json: { message: "You can't edit this tweet." }, status: :unprocessable_entity }
+      else
+        if @tweet.update(tweet_params)
+          puts "ddfsaf"
+          format.html { redirect_to tweet_url(@tweet), notice: "Tweet was successfully updated." }
+          format.json { render :show, status: :ok, location: @tweet }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @tweet.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
